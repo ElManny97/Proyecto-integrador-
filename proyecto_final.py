@@ -64,14 +64,9 @@ print("__Cantidad de productos vendidos__")
 ventas_producto_cantidad = df_limpio.groupby("producto")["cantidad"].agg([
     ("cantidad", "sum"),
     ("promedio", "mean")
-]).sort_values("total", ascending=False)
+]).sort_values("cantidad", ascending=False)
 print(ventas_producto_cantidad)
 
-#Analisis de ventas de productos por mes 
-
-Ventas_de_producto_por_mes= df_limpio.groupby(["producto","mes"])["total"].sum()
-Ventas_de_producto_por_mes = Ventas_de_producto_por_mes.sort_values("mes")
-print(Ventas_de_producto_por_mes[["mes", "total"]])
 
 #La idea de estos reportes e sver que productso son loq ue en venta de precio nos afectan mas y cuales en piezas son las que serian mas, lo cual nos permite ver dos cosas muy improtantes cuales son aquellos productso que pro monto aportan mas a nuestras ventas y cuales en cuestion de peizas son los que mas se mueven esta información es importante para el control de stock de la tiendas y para la paneación de pedidos de lo que es el area logistica
 
@@ -80,4 +75,29 @@ print(Ventas_de_producto_por_mes[["mes", "total"]])
 plt.style.use("default")
 sns.set_palette("husl")
 
+print("__Grafico de ventas de producto")
+plt.figure(figsize=(10, 6))
+ventas_producto_grafico = df.groupby("producto")["total"].sum().sort_values(ascending=True)
+ventas_producto_grafico.plot(kind='barh', color="red")
+plt.title('Total de Ventas por Producto', fontsize=16, fontweight='bold')
+plt.xlabel('Ventas Totales ($)', fontsize=12)
+plt.ylabel('Producto', fontsize=12)
+plt.grid(axis='x', alpha=0.3)
+plt.tight_layout()
+plt.savefig('graficos/grafico1_ventas_producto.png', dpi=300, bbox_inches='tight')
+plt.show()
+print("se ha guardado el grafico de ventas")
 
+print("Grafico de unidades vendidas por producto")
+plt.figure(figsize=(10, 6))
+unidades_vendidas_por_producto = df.groupby('producto')['cantidad'].sum().sort_values(ascending=False)
+plt.bar(unidades_vendidas_por_producto.index, unidades_vendidas_por_producto.values, color='coral')
+plt.title('Unidades Vendidas por Producto', fontsize=16, fontweight='bold')
+plt.xlabel('Producto', fontsize=12)
+plt.ylabel('Unidades Vendidas', fontsize=12)
+plt.xticks(rotation=45, ha='right')
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.savefig('grafico5_unidades_vendidas.png', dpi=300, bbox_inches='tight')
+plt.show()
+print("se ha guardado el grafico de cantidad de productos")
